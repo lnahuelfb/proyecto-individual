@@ -1,8 +1,15 @@
 import React from 'react'
 
+import SearchBar from './SearchBar'
+import { Container, SearchContainer } from './styles/NavBar'
+
 function NavBar() {
-  return(
-    <h1>Soy un navbar</h1>
+  return (
+    <Container>
+      <SearchContainer>
+        <SearchBar/>
+      </SearchContainer>
+    </Container>
   )
 }
 

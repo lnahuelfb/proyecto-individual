@@ -1,6 +1,4 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom/cjs/react-router-dom.min'
-// import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import { Container, Img, Button, Title, SubTitle, LinkStyled } from './styles/LandingPage'
 import Landing from './images/landing.jpg'
 
