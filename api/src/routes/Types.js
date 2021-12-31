@@ -3,7 +3,8 @@
 const express = require('express');
 
 const router = express.Router();
-const { getTypes } = require('../controllers/Types');
+
+const { getTypes } = require('../controller/Types');
 
 router.get('/', getTypes);
 

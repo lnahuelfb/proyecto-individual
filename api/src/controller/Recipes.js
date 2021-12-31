@@ -23,7 +23,7 @@ const API = async () => {
         name: diet,
       })),
       healthy: recipe.healthScore,
-      summary: recipe.summary,
+      summary: recipe.summary.replace(/<[^>]*>?/g, ''),
       image: recipe.image,
       id: uuidv4(),
       score: parseInt(recipe.spoonacularScore),

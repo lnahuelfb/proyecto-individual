@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { addRecipe } = require('../controllers/Recipe');
+const { addRecipe } = require('../controller/Recipe');
 
 router.post('/', addRecipe);
 

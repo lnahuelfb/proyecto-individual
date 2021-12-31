@@ -1,5 +1,5 @@
-const { Recipe, conn } = require('../../src/db.js');
 const { expect } = require('chai');
+const { Recipe, conn } = require('../../src/db.js');
 
 describe('Recipe model', () => {
   before(() => conn.authenticate()
