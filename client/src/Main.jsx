@@ -11,7 +11,7 @@ import {
   orderByTitle,
   orderByScore,
 } from "./actions";
-import Pagination from "./pagination/pagination";
+import Pagination from "./pagination/pagination.jsx";
 
 import Card from './components/Card'
 
@@ -39,49 +39,53 @@ export default function Main() {
     setCurrentPage(pageNumber)
   }
 
-  // const handleClickGet = (e) => {
-  //   e.preventDefault()
-  //   dispatch(getRecipes(''))
-  // }
+  const handleClickGet = (e) => {
+    e.preventDefault()
+    dispatch(getRecipes(''))
+  }
 
-  // const handleFilterDiet = (e) => {
-  //   console.log("despachando", e.target.value);
-  //   e.preventDefault();
-  //   dispatch(filterByDiet(e.target.value));
-  // }
+  const handleFilterDiet = (e) => {
+    console.log("despachando", e.target.value);
+    e.preventDefault();
+    dispatch(filterByDiet(e.target.value));
+  }
 
-  // const handleFilterCreated = (e) => {
-  //   e.preventDefault();
-  //   dispatch(filterCreated(e.target.value));
-  // }
+  const handleFilterCreated = (e) => {
+    e.preventDefault();
+    dispatch(filterCreated(e.target.value));
+  }
 
-  // const handleSortTitle = (e) => {
-  //   e.preventDefault();
-  //   dispatch(orderByTitle(e.target.value));
-  //   setCurrentPage(1);
-  //   setOrder(`ordered ${e.target.value}`);
-  // }
+  const handleSortTitle = (e) => {
+    e.preventDefault();
+    dispatch(orderByTitle(e.target.value));
+    setCurrentPage(1);
+    setOrder(`ordered ${e.target.value}`);
+  }
 
-  // const handleSortScore = (e) => {
-  //   e.preventDefault();
-  //   dispatch(orderByScore(e.target.value));
-  //   setCurrentPage(1);
-  //   setOrder(`ordered ${e.target.value}`);
-  // }
+  const handleSortScore = (e) => {
+    e.preventDefault();
+    dispatch(orderByScore(e.target.value));
+    setCurrentPage(1);
+    setOrder(`ordered ${e.target.value}`);
+  }
 
 
   return(
     <>
       <Cards>
         {
-          currentRecipes ? (currentRecipes.map((recipe) => {
+          currentRecipes
+            ? (currentRecipes.map((recipe) => {
               return (
                 <div key = {recipe.id}>
                   <Card
                     recipe={recipe}
                     id={recipe.id}
                     title={recipe.title}
-                    imag={recipe.image}
+                    summary={recipe.summary}
+                    score={recipe.score}
+                    healthiness={recipe.healthiness}
+                    image={recipe.image}
                     diets={recipe.diets}
                   />
                 </div>

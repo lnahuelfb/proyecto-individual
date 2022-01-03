@@ -11,7 +11,7 @@ const addRecipe = async (req, res, next) => {
     title,
     summary,
     score,
-    healthy,
+    healthiness,
     image,
     steps,
     diets,
@@ -30,7 +30,7 @@ const addRecipe = async (req, res, next) => {
       title,
       summary,
       score: score || 'No hay puntaje',
-      healthy: healthy || 'No hay puntaje saludable',
+      healthiness: healthiness || 'No hay puntaje saludable',
       steps: steps || 'Esta receta no tiene paso a paso',
       image: image || 'https://aeroclub-issoire.fr/wp-content/uploads/2020/05/image-not-found-300x225.jpg',
     });

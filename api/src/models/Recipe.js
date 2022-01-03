@@ -27,7 +27,11 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
     },
 
-    healthy: {
+    image: {
+      type: DataTypes.TEXT,
+    },
+
+    healthiness: {
       type: DataTypes.FLOAT,
     },
 
