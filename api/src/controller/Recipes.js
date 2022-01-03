@@ -12,26 +12,6 @@ const { v4: uuidv4 } = require('uuid');
 const { Op } = require('sequelize');
 const { Recipe, Diet } = require('../db');
 
-// const APIcall = async function () {
-//   const apiUrl = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&number=60&addRecipeInformation=true`);
-//   const apiInfo = await apiUrl.data.results.map(el => {
-//     return {
-//       id: el.id,
-//       name: el.title,
-//       summary: el.summary,
-//       diets: el.diets.map(d => { return { name: d } }),
-//       score: el.spoonacularScore,
-//       healthiness: el.healthScore,
-//       image: el.image,
-//       createdInDb: false,
-//       instructions: el.analyzedInstructions[0]?.steps.map(paso => {
-//         return `<b>${paso.number}</b> ${paso.step}<br>`
-//       })
-//     }
-//   })
-//   return apiInfo
-// };
-
 const APIcall = async () => {
   try {
     const recipeApi = await axios.get(
@@ -44,7 +24,7 @@ const APIcall = async () => {
       healthiness: recipe.healthScore,
       summary: recipe.summary.replace(/<[^>]*>?/g, ''),
       image: recipe.image,
-      id: uuidv4(),
+      id: recipe.id,
       score: parseInt(recipe.spoonacularScore),
       steps: recipe.analyzedInstructions
         .map((r) => r.steps.map((s) => s.step))
@@ -53,13 +33,102 @@ const APIcall = async () => {
     }));
     return requiredInfo;
   } catch {
-    console.log('HAY ERROR EN APICALL');
+    console.log('Error en el llamado a la API');
 
     (e) => console.log(e);
   }
 };
 
-const getRecipes = async (req, res, next) => { };
+const getRecipes = async (req, res, next) => {
+  const { name } = req.query;
+
+  if (!name) {
+    const allRecipesOnDB = await Recipe.findAll({
+      include: {
+        model: Diet,
+        through: {
+          attributes: [],
+        },
+      },
+    });
+
+    if (allRecipesOnDB.length > 0) {
+      return res
+        .status(200)
+        .send(allRecipesOnDB);
+    }
+
+    try {
+      const requiredInfo = await APIcall();
+      const recipesBulk = await Recipe.bulkCreate(requiredInfo);
+
+      recipesBulk.map((recipe) => {
+        requiredInfo.map((r) => {
+          if (r.id === recipe.id && r.Diets.length) {
+            r.Diets.map(async (diet) => {
+              try {
+                diet.name = `${diet.name.charAt(0).toUpperCase()} ${diet.name.slice(1)}`;
+
+                const dietOnDB = await Diet.findOne({
+                  where: {
+                    name: diet.name,
+                  },
+                });
+
+                await recipe.addDiet(dietOnDB);
+              } catch {
+                console.log('La dieta no se ha asociado');
+                (err) => next(err);
+              }
+            });
+          }
+        });
+      });
+
+      const AllrecipesOnBD = await Recipe.findAll({
+        include: {
+          model: Diet,
+          through: {
+            attributes: [],
+          },
+        },
+      });
+
+      return res
+        .status(200)
+        .send(AllrecipesOnBD);
+    } catch (err) {
+      console.log('No se ha podido crear y obtener las recetas');
+
+      next(err);
+    }
+  } else {
+    const query = name.toLowerCase();
+
+    try {
+      const FilterRecipes = await Recipe.findAll({
+        where: {
+          title: {
+            [Op.like]: `%${query}%`,
+          },
+        },
+        include: {
+          model: Diet,
+          through: {
+            attributes: [],
+          },
+        },
+      });
+
+      return res
+        .status(200)
+        .send(FilterRecipes);
+    } catch {
+      console.log('Error al filtrar');
+      (err) => next(err);
+    }
+  }
+};
 
 const getRecipeById = async (req, res, next) => {
   try {
