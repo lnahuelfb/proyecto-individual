@@ -15,16 +15,16 @@ const { Recipe, Diet } = require('../db');
 const APIcall = async () => {
   try {
     const recipeApi = await axios.get(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`,
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true`,
     );
     const requiredInfo = recipeApi.data.results.map((recipe) => ({
       title: recipe.title,
       created: false,
       Diets: recipe.diets.map((diet) => ({ name: diet })),
-      healthiness: recipe.healthScore,
+      healthScore: recipe.healthScore,
       summary: recipe.summary.replace(/<[^>]*>?/g, ''),
       image: recipe.image,
-      id: recipe.id,
+      id: uuidv4(),
       score: parseInt(recipe.spoonacularScore),
       steps: recipe.analyzedInstructions
         .map((r) => r.steps.map((s) => s.step))

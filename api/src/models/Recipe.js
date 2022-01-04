@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
     },
 
-    healthiness: {
+    healthScore: {
       type: DataTypes.FLOAT,
     },
 

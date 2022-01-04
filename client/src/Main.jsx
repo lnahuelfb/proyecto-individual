@@ -76,6 +76,7 @@ export default function Main() {
         {
           currentRecipes
             ? (currentRecipes.map((recipe) => {
+              console.log(recipe)
               return (
                 <div key = {recipe.id}>
                   <Card
@@ -84,7 +85,7 @@ export default function Main() {
                     title={recipe.title}
                     summary={recipe.summary}
                     score={recipe.score}
-                    healthiness={recipe.healthiness}
+                    healthScore={recipe.healthScore}
                     image={recipe.image}
                     diets={recipe.diets}
                   />
